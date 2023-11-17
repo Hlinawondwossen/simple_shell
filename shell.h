@@ -9,6 +9,8 @@
 #include <sys/stat.h>
 
 #define MAXARGS 64
+extern char **environ;
+
 
 char *search_path(char *cmd);
 void read_command(char **argv);
