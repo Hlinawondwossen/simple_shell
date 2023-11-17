@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-
-#define MAXARGS 64
+#include "shell.h"
 
 /**
  * search_path - searches the PATH for the command
@@ -23,12 +16,12 @@ while (p != NULL)
 sprintf(fullpath, "%s/%s", p, cmd);
 if (access(fullpath, X_OK) == 0)
 {
-return fullpath;
+return (fullpath);
 }
 p = strtok(NULL, ":");
 }
 free(fullpath);
-return NULL;
+return (NULL);
 }
 
 /**
@@ -68,7 +61,6 @@ argv[i] = NULL;
 */
 void print_env(void)
 {
-extern char **environ;
 char **env = environ;
 
 while (*env)
@@ -89,18 +81,15 @@ void execute_command(char **argv)
 pid_t pid;
 int status;
 char *fullpath;
-
 if (strcmp(argv[0], "exit") == 0)
 {
 exit(EXIT_SUCCESS);
 }
-
 if (strcmp(argv[0], "env") == 0)
 {
 print_env();
 return;
 }
-
 fullpath = search_path(argv[0]);
 if (fullpath == NULL)
 {
@@ -108,7 +97,6 @@ printf("./shell: No such file or directory\n");
 printf("#cisfun$ ");
 return;
 }
-
 pid = fork();
 if (pid == -1)
 {
@@ -117,7 +105,7 @@ exit(EXIT_FAILURE);
 }
 if (pid == 0)
 {
-if (execve(fullpath, argv, NULL) == -1) 
+if (execve(fullpath, argv, NULL) == -1)
 {
 perror("./shell");
 }
